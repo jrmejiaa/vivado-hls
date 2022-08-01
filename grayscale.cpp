@@ -8,6 +8,8 @@ void grayscale(unsigned char red[WIDTH * HEIGHT], unsigned char green[WIDTH * HE
     }
 }
 
+// TEST
+
 
 unsigned char convert_to_grayscale(unsigned char red, unsigned char green, unsigned char blue){
     uint32_t red_factor   = 0b00000000000110101110000101000111;
