@@ -4,7 +4,7 @@
 #include <chrono>
 #include <tapasco.hpp>
 
-#include "../hls-src/sobel.h"
+#include "../hls-src/sobel.cpp"
 
 int main(int argc, char const *argv[])
 {
