@@ -39,12 +39,12 @@ int main(int argc, char const *argv[])
 
     std::cout << "Start CPU Grayscale conversion..." << std::endl;
 
-    unsigned char grayArr[WIDTH * HEIGHT];
+    unsigned char cpuGrayArr[WIDTH * HEIGHT];
     auto cpu_start = std::chrono::high_resolution_clock::now();
-    grayscale(redArr, greenArr, blueArr, grayArr);
+    grayscale(redArr, greenArr, blueArr, cpuGrayArr);
     auto cpu_stop = std::chrono::high_resolution_clock::now();
 
-    int cpuGrayOk = memcmp(grayArr, grayExpect, WIDTH * HEIGHT);
+    int cpuGrayOk = memcmp(cpuGrayArr, grayExpect, WIDTH * HEIGHT);
     if (cpuGrayOk == 0) {
         std::cout << "CPU Grayscale conversion was successful." << std::endl;
         std::cout << "CPU time: " << std::chrono::duration_cast<std::chrono::microseconds>(cpu_stop - cpu_start).count() << " microsec." << std::endl;
@@ -57,10 +57,12 @@ int main(int argc, char const *argv[])
 
     std::cout << std::endl << "Start FPGA Grayscale conversion..." << std::endl;
 
+    unsigned char fpgaGrayArr[WIDTH * HEIGHT];
+
     auto red_buffer_pointer = tapasco::makeWrappedPointer(redArr, WIDTH * HEIGHT * sizeof(unsigned char));
     auto green_buffer_pointer = tapasco::makeWrappedPointer(greenArr, WIDTH * HEIGHT * sizeof(unsigned char));
     auto blue_buffer_pointer = tapasco::makeWrappedPointer(blueArr, WIDTH * HEIGHT * sizeof(unsigned char));
-    auto gray_buffer_pointer = tapasco::makeWrappedPointer(grayArr, WIDTH * HEIGHT * sizeof(unsigned char));
+    auto gray_buffer_pointer = tapasco::makeWrappedPointer(fpgaGrayArr, WIDTH * HEIGHT * sizeof(unsigned char));
 
     auto red_buffer_pointer_in = tapasco::makeInOnly(red_buffer_pointer);
     auto green_buffer_pointer_in = tapasco::makeInOnly(green_buffer_pointer);
@@ -73,7 +75,7 @@ int main(int argc, char const *argv[])
     job();
     auto fpga_stop = std::chrono::high_resolution_clock::now();
 
-    int fpgaGrayOk = memcmp(gray_buffer_pointer_out.value.value, grayExpect, WIDTH * HEIGHT);
+    int fpgaGrayOk = memcmp(fpgaGrayArr, grayExpect, WIDTH * HEIGHT);
     if (fpgaGrayOk == 0) {
         std::cout << "FPGA Grayscale conversion was successful." << std::endl;
         std::cout << "FPGA time: " << std::chrono::duration_cast<std::chrono::microseconds>(fpga_stop - fpga_start).count() << " microsec." << std::endl;
