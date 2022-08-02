@@ -28,11 +28,11 @@ endif(NOT TARGET tapasco)
 
 find_package (Threads)
 
-add_executable(grayscale-launch grayscale-launch.cpp)
-set_tapasco_defaults(grayscale-launch)
-target_link_libraries(grayscale-launch tapasco ${CMAKE_THREAD_LIBS_INIT} platform tlkm)
+add_executable(sobel-launch sobel-launch.cpp)
+set_tapasco_defaults(sobel-launch)
+target_link_libraries(sobel-launch tapasco ${CMAKE_THREAD_LIBS_INIT} platform tlkm)
 
-install(TARGETS grayscale-launch
+install(TARGETS sobel-launch
         ARCHIVE  DESTINATION share/Tapasco/bin/
         LIBRARY  DESTINATION share/Tapasco/bin/
         RUNTIME  DESTINATION share/Tapasco/bin/)
