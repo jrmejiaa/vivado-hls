@@ -4,7 +4,7 @@
 #include <chrono>
 #include <tapasco.hpp>
 
-#include "../hls-src/grayscale.h"
+#include "../hls-src/grayscale.cpp"
 
 int main(int argc, char const *argv[])
 {

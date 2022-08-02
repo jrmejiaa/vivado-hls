@@ -8,7 +8,7 @@
 
 int main(int argc, char const *argv[])
 {
-    if(argc != 5) {
+    if(argc != 3) {
         std::cout << "Usage: ./sobel-launch <gray.data> <sobel.data>" << std::endl;
         return -1;
     }
@@ -46,9 +46,6 @@ int main(int argc, char const *argv[])
     }
 
     /* FPGA */
-
-    std::cout << std::endl << "Start FPGA Sobel conversion..." << std::endl;
-
     unsigned char fpgaSobelArr[(WIDTH-2) * (HEIGHT-2)];
 
     auto gray_buffer_pointer = tapasco::makeWrappedPointer(grayArr, WIDTH * HEIGHT * sizeof(unsigned char));
@@ -57,6 +54,7 @@ int main(int argc, char const *argv[])
     auto gray_buffer_pointer_in = tapasco::makeInOnly(gray_buffer_pointer);
     auto sobel_buffer_pointer_out = tapasco::makeOutOnly(sobel_buffer_pointer);
 
+    std::cout << std::endl << "Start FPGA Sobel conversion..." << std::endl;
     auto job = tapasco.launch(42, gray_buffer_pointer_in, sobel_buffer_pointer_out);
 
     auto fpga_start = std::chrono::high_resolution_clock::now();
