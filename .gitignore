@@ -31,5 +31,8 @@
 *.out
 *.app
 
+# Avoid build from api
+api-*/build
+
 # VS Code settings
 .vscode/
