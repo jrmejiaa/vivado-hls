@@ -1,13 +1,13 @@
 #include "sobel.h"
-#include "ap_axi_sdata.h"
 
 void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-2)*(HEIGHT-2)]) {
-#pragma HLS array_reshape variable=input_r block factor=256
+#pragma HLS array_partition variable=input_r block factor=32
+#pragma HLS array_reshape variable=input_r block factor=128
 
     LOOP1: for (int y = 1; y < HEIGHT-1; ++y) {
 
         LOOP2: for (int x = 1; x < WIDTH-1; ++x) {
-#pragma HLS pipeline II=3
+#pragma HLS pipeline II=1
 
         	// tmp variables to avoid double read
         	unsigned char tmp0_0 = input_r[(y-1)*WIDTH+x-1];
