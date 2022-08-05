@@ -23,7 +23,7 @@ void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-
 
             int sum = ((gx < 0) ? -gx : gx) + ((gy < 0) ? -gy : gy);
 
-            unsigned char result = (sum < 0) ? 0 : ((sum > 255) ? 255 : sum);
+            unsigned char result = (sum > 255) ? 255 : sum;
 
             output_r[(y-1)*(WIDTH-2)+(x-1)] = result;
 
