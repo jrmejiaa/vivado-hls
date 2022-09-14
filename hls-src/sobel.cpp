@@ -1,14 +1,23 @@
 #include "sobel.h"
-#include <iostream>
 
+d_arval val_buffer[1024] = { 0 };
+d_arval val_buffer_ext[3] = { 0 };
+
+void shift_buffer() {
+	for (int i = 1; i >= 0; --i) {
+		#pragma HLS unroll
+		val_buffer_ext[i+1] = val_buffer_ext[i];
+	}
+	val_buffer_ext[0] = val_buffer[1023];
+	for (int i = 1022; i >= 0; --i) {
+		#pragma HLS unroll
+		val_buffer[i+1] = val_buffer[i];
+	}
+}
 
 void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-2)*(HEIGHT-2)]) {
-
-	d_arval val_buffer[1024];
-	#pragma HLS array_partition variable=val_buffer complete dim=0
-
-	d_arval val_buffer_ext[3];
-	#pragma HLS array_partition variable=val_buffer complete dim=0
+#pragma HLS array_partition variable=val_buffer complete dim=0
+#pragma HLS array_partition variable=val_buffer complete dim=0
 
 	val_buffer[1] = input_r[2*WIDTH+1];
 	val_buffer[2] = input_r[2*WIDTH];
@@ -48,27 +57,16 @@ void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-
 
 		// Buffer shifting
 		if (x < WIDTH-2) {
-			for (int i = 1; i >= 0; --i) {
-				#pragma HLS unroll
-				val_buffer_ext[i+1] = val_buffer_ext[i];
-			}
-			val_buffer_ext[0] = val_buffer[1023];
-			for (int i = 1022; i >= 0; --i) {
-				#pragma HLS unroll
-				val_buffer[i+1] = val_buffer[i];
-			}
+			shift_buffer();
 		}
 	}
 
     OUTER_LOOP: for (d_loidx y = 2; y < HEIGHT-1; ++y) {
 
 		// Buffer shifting end of row
-		val_buffer_ext[0] = val_buffer[1021];
-		val_buffer_ext[1] = val_buffer[1022];
-		val_buffer_ext[2] = val_buffer[1023];
-		for (int i = 1020; i >= 0; --i) {
+		for (int i = 0; i < 3; ++i) {
 			#pragma HLS unroll
-			val_buffer[i+3] = val_buffer[i];
+			shift_buffer();
 		}
 
 		val_buffer[1] = input_r[(y+1)*WIDTH+1];
@@ -104,15 +102,7 @@ void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-
 
 			// Buffer shifting
 			if (x < WIDTH-2) {
-				for (int i = 1; i >= 0; --i) {
-					#pragma HLS unroll
-					val_buffer_ext[i+1] = val_buffer_ext[i];
-				}
-				val_buffer_ext[0] = val_buffer[1023];
-				for (int i = 1022; i >= 0; --i) {
-					#pragma HLS unroll
-					val_buffer[i+1] = val_buffer[i];
-				}
+				shift_buffer();
 			}
         }
     }
