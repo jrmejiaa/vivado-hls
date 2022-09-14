@@ -4,7 +4,7 @@
 #include <chrono>
 #include <tapasco.hpp>
 
-#include "../hls-src/sobel.cpp"
+#include "../cpu/sobel.cpp"
 
 int main(int argc, char const *argv[])
 {
@@ -55,8 +55,10 @@ int main(int argc, char const *argv[])
     auto sobel_buffer_pointer_out = tapasco::makeOutOnly(sobel_buffer_pointer);
 
     std::cout << std::endl << "Start FPGA Sobel conversion..." << std::endl;
-    auto job = tapasco.launch(42, gray_buffer_pointer_in, sobel_buffer_pointer_out);
+    std::cout << "Create job..." << std::endl;
+    auto job = tapasco.launch(43, gray_buffer_pointer_in, sobel_buffer_pointer_out);
 
+    std::cout << "Run job..." << std::endl;
     auto fpga_start = std::chrono::high_resolution_clock::now();
     job();
     auto fpga_stop = std::chrono::high_resolution_clock::now();
