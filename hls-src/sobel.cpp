@@ -4,6 +4,8 @@ d_arval val_buffer[1024] = { 0 };
 d_arval val_buffer_ext[3] = { 0 };
 
 void shift_buffer() {
+	#pragma HLS inline
+
 	for (int i = 1; i >= 0; --i) {
 		#pragma HLS unroll
 		val_buffer_ext[i+1] = val_buffer_ext[i];
