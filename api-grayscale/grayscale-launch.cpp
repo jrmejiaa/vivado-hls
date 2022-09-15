@@ -4,7 +4,7 @@
 #include <chrono>
 #include <tapasco.hpp>
 
-#include "../hls-src/grayscale.cpp"
+#include "../cpu/grayscale.cpp"
 
 int main(int argc, char const *argv[])
 {
@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
         std::cout << "CPU Grayscale conversion was successful." << std::endl;
         std::cout << "CPU time: " << std::chrono::duration_cast<std::chrono::microseconds>(cpu_stop - cpu_start).count() << " microsec." << std::endl;
     } else {
-        std::cout << "CPU Grayscale conversion unsuccessful." << std::endl;
+        std::cout << "CPU Grayscale conversion was unsuccessful." << std::endl;
         return 1;
     }
 
@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
         std::cout << "FPGA Grayscale conversion was successful." << std::endl;
         std::cout << "FPGA time: " << std::chrono::duration_cast<std::chrono::microseconds>(fpga_stop - fpga_start).count() << " microsec." << std::endl;
     } else {
-        std::cout << "FPGA Grayscale conversion unsuccessful." << std::endl;
+        std::cout << "FPGA Grayscale conversion was unsuccessful." << std::endl;
         return 1;
     }
 
