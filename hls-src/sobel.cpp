@@ -42,7 +42,7 @@ d_io comb_calc() {
 
 void sobel(unsigned char input_r[WIDTH * HEIGHT], unsigned char output_r[(WIDTH-2)*(HEIGHT-2)]) {
 #pragma HLS array_partition variable=val_buffer complete dim=0
-#pragma HLS array_partition variable=val_buffer complete dim=0
+#pragma HLS array_partition variable=val_buffer_ext complete dim=0
 
 	val_buffer[1] = input_r[2*WIDTH+1];
 	val_buffer[2] = input_r[2*WIDTH];
